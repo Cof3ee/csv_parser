@@ -11,29 +11,29 @@ class Table
 {
 public:
 
-	Table(const vector<string>& keys, const  vector<vector<string>>& data) //Принимаем ключи т.е. названия столбцов и данные
+	Table(const vector<string>& keys, const  vector<vector<string>>& data) //We accept keys - column names and data
 	{
-		//Переменная для итерация по ключам
+		//Variable for iteration over keys
 		int counter = 0;  
 
-		for (const vector<string>& values : data) //Запись своих данных для столбцов
+		for (const vector<string>& values : data) //Recording your own data for columns
 		{
 			m.emplace(keys[counter++], values); 
 		}
 	}
 
-	//Поиск формулы в ячейке 
+	//Finding a formula in a cell 
 	void search_formul() 
 	{
-		for (auto& pair : m) //Вытащить пару из map
+		for (auto& pair : m) //Pull a pair from the map
 		{
-			for (auto cell : pair.second) //Извлечь ячейку из vector
+			for (auto cell : pair.second) //Extract cell from vector
 			{
-				for (char symbol : cell) //Поиска формулы которая начинается с: "="
+				for (char symbol : cell) //Search for a formula that starts with: "="
 				{
 					if (symbol == '=')
 					{
-						search_mat_symbol(pair); //Если формула найдена, то вызывается функция на поиск символа операции
+						search_mat_symbol(pair); //If the formula is found, then the function is called to search for the operation symbol
 					}
 					break;
 				}
@@ -41,21 +41,21 @@ public:
 		}
 	}
 
-	//Вывод таблицы на экран
+	//Displaying a table on the screen
 	void display()const
 	{
-		for (const auto & pair : m) //Вывод названий столбиков
+		for (const auto & pair : m) //Displaying column names
 		{
 			cout << pair.first << '\t';
 		}
 
 		cout << endl;
 
-		for (int counter = 0; counter < m.size(); counter++) //Вывод остальных данных
+		for (int counter = 0; counter < m.size(); counter++) //Output of other data
 		{
-			for (const auto& pair : m) //Извлекаем пару
+			for (const auto& pair : m) //Extracting a pair
 			{
-				if(counter <pair.second.size()) //Если счётчик не превышает размер vector
+				if(counter <pair.second.size()) //If the counter does not exceed the size of vector
 				{
 				  cout << pair.second[counter] << '\t'; 
 			    }
@@ -66,12 +66,12 @@ public:
 
 private:
 
-	//Поиск символа мат операции
+	//Search for the symbol of the mate operation
 	void search_mat_symbol(pair< string, vector<string >> item)
 	{
-		for (auto cell : item.second) //Извлечь ячейку из vector
+		for (auto cell : item.second) //Extract cell from vector
 		{
-			for (char symbol : cell) //Поиск символа мат. операции
+			for (char symbol : cell) //Search for mat symbol. operations
 			{
 				if (symbol == '+')
 				{
@@ -93,143 +93,143 @@ private:
 		}
 	}
 
-	//Подсчёт суммы
+	//Calculating the amount
 	void evaluate_plus(pair< string, vector<string >> item)
 	{
-		//Счётчик для обозначения ячейки в которой формула
+		//Counter to indicate the cell in which the formula
 		int count_vector = 0;
 
-		for (auto cell : item.second) //Извлечь ячейку из vector
+		for (auto cell : item.second) //Extract cell from vector
 		{
-			for (char symbol : cell) //Поиск формулы
+			for (char symbol : cell) //Search for formula
 			{
 				if (symbol == '=')
 				{
-					// Находим позицию символа "+"
+					// Finding the position of the "+" symbol
 					size_t plus_pos = cell.find('+');
 
-					// Извлекаем первую часть строки (после "=" и до "+")
+					// Extract the first part of the string (after the "=" and before the "+")
 					string first = cell.substr(1, plus_pos - 1);
 
-					// Извлекаем вторую часть строки (после "+")
+					// Extract the second part of the string (after the "+")
 					string second = cell.substr(plus_pos + 1);
 
-					// Извлекаем последний символ (цифру)
+					// Extracting the last character (digit)
 					char first_digitChar = first.back();
-					// Преобразуем символ цифры в число (int)
+					// Convert a digit character to a number (int)
 					int count_first = first_digitChar - '0';
-					// Удаляем последний символ из строки
+					// Remove the last character from a string
 					first.pop_back();
 					
 					char second_digitChar = second.back();
 					int count_second = second_digitChar - '0';
 					second.pop_back();
 
-					//Запись в переменные значений которые нужно посчитать
+					//Writing values ??to variables that need to be read
 					int value1 = stoi(m[first][count_first - 2]);
 					int value2 = stoi(m[second][count_second - 2]);
 
 					int result = value1 + value2;
 
-					//Очистка формулы в ячейке
+					//Clear a formula in a cell
 					m[item.first][count_vector] = ""; 
-					//Запись новых данных в ячейку
+					//Writing new data to a cell
 					m[item.first][count_vector] = to_string(result);
 				}
-				break; //Чтобы не итерироваться по всей ячейке
+				break; //To avoid iterating over the entire cell
 			}
 			count_vector++; 
 		}
 	}
-	//Подсчёт разницы
+	//Calculating the difference
 	void evaluate_minus(pair< string, vector<string >> item)
 	{
-		//Счётчик для обозначения ячейки в которой формула
+		//Counter to indicate the cell in which the formula
 		int count_vector = 0;
 
-		for (auto cell : item.second) //Извлечь ячейку из vector
+		for (auto cell : item.second) //Extract cell from vector
 		{
-			for (char symbol : cell) //Поиск формулы
+			for (char symbol : cell) //Search for formula
 			{
 				if (symbol == '=')
 				{
-					// Находим позицию символа "-"
+					// Finding the position of the symbol "-"
 					size_t minus_pos = cell.find('-');
 
-					// Извлекаем первую часть строки (после "=" и до "-")
+					// Extract the first part of the string (after the "=" and before the "-")
 					string first = cell.substr(1, minus_pos - 1);
 
-					// Извлекаем вторую часть строки (после "-")
+					// Extract the second part of the string (after "-")
 					string second = cell.substr(minus_pos + 1);
 
-					// Извлекаем последний символ (цифру)
+					// Extracting the last character (digit)
 					char first_digitChar = first.back();
-					// Преобразуем символ цифры в число (int)
+					// Convert a digit character to a number (int)
 					int count_first = first_digitChar - '0';
-					// Удаляем последний символ из строки
+					// Remove the last character from a string
 					first.pop_back();
 
 					char second_digitChar = second.back();
 					int count_second = second_digitChar - '0';
 					second.pop_back();
 
-					//Запись в переменные значений которые нужно посчитать
+					//Writing values ??to be calculated into variables
 					int value1 = stoi(m[first][count_first - 2]);
 					int value2 = stoi(m[second][count_second - 2]);
 
 					int result = value1 - value2;
 
-					//Очистка формулы в ячейке
+					//Clear a formula in a cell
 					m[item.first][count_vector] = "";
-					//Запись новых данных в ячейку
+					//Writing new data to a cell
 					m[item.first][count_vector] = to_string(result);
 				}
-				break; //Чтобы не итерироваться по всей ячейке
+				break; //To avoid iterating over the entire cell
 			}
 			count_vector++;
 		}
 	}
-	//Подсчёт произведения
+	//Product calculation
 	void evaluate_multiplication(pair< string, vector<string >> item)
 	{
-		//Счётчик для обозначения ячейки в которой формула
+		//Counter to indicate the cell in which the formula
 		int count_vector = 0;
 
-		for (auto cell : item.second) //Извлечь ячейку из vector
+		for (auto cell : item.second) //Extract cell from vector
 		{
-			for (char symbol : cell) //Поиск формулы
+			for (char symbol : cell) //Search for formula
 			{
 				if (symbol == '=')
 				{
-					// Находим позицию символа "*"
+					// Finding the position of the symbol "*"
 					size_t multiplication_pos = cell.find('*');
 
-					// Извлекаем первую часть строки (после "=" и до "*")
+					// Extract the first part of the string (after "=" and before "*")
 					string first = cell.substr(1, multiplication_pos - 1);
 
-					// Извлекаем вторую часть строки (после "*")
+					// Extract the second part of the string (after "*")
 					string second = cell.substr(multiplication_pos + 1);
 
-					// Извлекаем последний символ (цифру)
+					// Extracting the last character (digit)
 					char first_digitChar = first.back();
-					// Преобразуем символ цифры в число (int)
+					// Convert a digit character to a number (int)
 					int count_first = first_digitChar - '0';
-					// Удаляем последний символ из строки
+					// Remove the last character from a string
 					first.pop_back();
 
 					char second_digitChar = second.back();
 					int count_second = second_digitChar - '0';
 					second.pop_back();
 
-					//Запись в переменные значений которые нужно посчитать
+					//Writing values ??to be calculated into variables
 					int value1 = stoi(m[first][count_first - 2]);
 					int value2 = stoi(m[second][count_second - 2]);
 
 					int result = value1 * value2;
 
-					//Очистка формулы в ячейке
+					//Clear a formula in a cell
 					m[item.first][count_vector] = "";
-					//Запись новых данных в ячейку
+					//Writing new data to a cell
 					m[item.first][count_vector] = to_string(result);
 				}
 				break; //Чтобы не итерироваться по всей ячейке
@@ -294,68 +294,68 @@ private:
 
 Table file_to_strings(const string& path)
 {
-	//Названия столбцов
+	//Column names
 	vector<string> column_names; 
-	//Данные столбцов
+	//Column data
 	vector<string> table_data;
-    //Строка ячеек из файла
+    //Row of cells from file
 	string line_cells; 
-	//Одна ячейка
+	//One cell
 	string cell; 
-	//Объекта для чтения файла
+	//Object to read the file
 	ifstream fs; 
 	vector<vector<string>> lines_token;
 
-	fs.open(path); //Открытие файла
+	fs.open(path); //Opening a file
 
 	
-	if (!fs.is_open()) //Проверка на открытие
+	if (!fs.is_open()) //Opening check
 	{
 		cout << "Ошибка открытия ффайла!" << endl;
 	}
-	else //Если файл открыт
+	else //If the file is open
 	{
 		if (getline(fs, line_cells))
 		{
-			stringstream data(line_cells);    //Помещение данных из файла в data
-			while (getline(data, cell, ';'))  //Разделение данных из data, по отдельности
+			stringstream data(line_cells);    //Putting data from a file into data
+			while (getline(data, cell, ';'))  //Separating data from data, separately
 			{
-				column_names.push_back(cell); //Загрузка разделённых данных в vector
+				column_names.push_back(cell); //Loading separated data into vector
 			}
 		}
 
 		while (getline(fs, line_cells)) 
 		{
-			stringstream data(line_cells);   //Помещение данных из файла в data
-			while (getline(data, cell, ';')) //Разделение данных из data, по отдельности
+			stringstream data(line_cells);   //Putting data from a file into data
+			while (getline(data, cell, ';')) //Separating data from data, separately
 			{
-				table_data.push_back(cell);  //Загрузка разделённых данных в vector
+				table_data.push_back(cell);  //Loading separated data into vector
 			}
 		}
 
-		//Отслеживание в if
+		//Tracking in if
 		int counter_if = 0;
-		//Отслеживание ячеек вектора
+		//Vector cell tracking
 		int counter_cells = 0;
 
-		for (string cell : table_data) //Разделение данных
+		for (string cell : table_data) //Data separation
 		{
-			//vector для записи в vector
+			//vector to write to vector
 			vector<string> j;  
 
-			j.push_back(cell); // Добавляем ячейку в vector
+			j.push_back(cell); // Add a cell to vector
 			
-			if (counter_if < column_names.size()) //Запись первой строчки
+			if (counter_if < column_names.size()) //Recording the first line
 			{
 				lines_token.push_back(j); 
 				counter_if++; 
 			}
-			else //Запись остальных строчек
+			else //Recording the remaining lines
 			{
 				lines_token[counter_cells].push_back(cell);
 				counter_cells++;
 
-				if (counter_cells >= lines_token.size()) //Проверка чтобы не выйти за размер vector
+				if (counter_cells >= lines_token.size()) //Checking not to exceed the vector size
 				{
 					counter_cells = 0;
 				}
@@ -363,7 +363,7 @@ Table file_to_strings(const string& path)
 		}
 
 		Table t(column_names, lines_token); 
-		return t; //Возвращаем названия столбцов и их данные
+		return t; //Returning column names and their data
 
 	}
 
@@ -376,20 +376,20 @@ int main()
 {
 	setlocale(LC_ALL, "ru");
 
-	//Переменная для хранения пути к файлу
+	//Variable to store the path to the file
 	string path = "myfile1.csv"; 
 
-	//Создание даблицы и загрузка в неё данных из файла
+	//Creating a table and loading data from a file into it
 	Table table = file_to_strings(path);
 
 	cout << "\tИзначальная таблица:\n\n";
-	//Вывод таблицы
+	//Table output
 	table.display(); 
-	//Обработка всех формул
+	//Processing all formulas
 	table.search_formul(); 
 	
 	cout << "\n\tПосчитанная таблица:\n\n";
-	//Снова вывод таблицы
+	//Table output again
 	table.display();
 
 
