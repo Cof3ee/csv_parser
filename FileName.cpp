@@ -338,7 +338,7 @@ Table file_to_strings(const string& path)
 		//Vector cell tracking
 		int counter_cells = 0;
 
-		for (string cell : table_data) //Data separation
+		for (const string& cell : table_data) //Data separation
 		{
 			//vector to write to vector
 			vector<string> j;  
@@ -361,10 +361,8 @@ Table file_to_strings(const string& path)
 				}
 			}
 		}
-
 		Table t(column_names, lines_token); 
 		return t; //Returning column names and their data
-
 	}
 
 
@@ -391,8 +389,6 @@ int main()
 	cout << "\n\tПосчитанная таблица:\n\n";
 	//Table output again
 	table.display();
-
-
-
+	
 	return 0;
 }
