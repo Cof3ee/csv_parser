@@ -1,4 +1,4 @@
-#include <iostream>
+п»ї#include <iostream>
 #include <fstream>
 #include <string>
 #include <map>
@@ -25,15 +25,15 @@ public:
 	//Finding a formula in a cell 
 	void search_formul() 
 	{
-		for (auto& pair : m) //Pull a pair from the map
+		for (const auto& column : m) //Pull a pair from the map
 		{
-			for (auto cell : pair.second) //Extract cell from vector
+			for (auto cell : column.second) //Extract cell from vector
 			{
 				for (char symbol : cell) //Search for a formula that starts with: "="
 				{
 					if (symbol == '=')
 					{
-						search_mat_symbol(pair); //If the formula is found, then the function is called to search for the operation symbol
+						search_mat_symbol(column); //If the formula is found, then the function is called to search for the operation symbol
 					}
 					break;
 				}
@@ -42,16 +42,16 @@ public:
 	}
 
 	//Displaying a table on the screen
-	void display()const
+	void display() const
 	{
-		for (const auto & pair : m) //Displaying column names
+		for (const auto & column : m) //Displaying column names
 		{
-			cout << pair.first << '\t';
+			cout << column.first << '\t';
 		}
 
 		cout << endl;
 
-		for (int counter = 0; counter < m.size(); counter++) //Output of other data
+		for (size_t counter = 0; counter < m.size(); counter++) //Output of other data
 		{
 			for (const auto& pair : m) //Extracting a pair
 			{
@@ -125,14 +125,12 @@ private:
 					int count_second = second_digitChar - '0';
 					second.pop_back();
 
-					//Writing values ??to variables that need to be read
+					//Writing values вЂ‹вЂ‹to variables that need to be read
 					int value1 = stoi(m[first][count_first - 2]);
 					int value2 = stoi(m[second][count_second - 2]);
 
 					int result = value1 + value2;
 
-					//Clear a formula in a cell
-					m[item.first][count_vector] = ""; 
 					//Writing new data to a cell
 					m[item.first][count_vector] = to_string(result);
 				}
@@ -173,7 +171,7 @@ private:
 					int count_second = second_digitChar - '0';
 					second.pop_back();
 
-					//Writing values ??to be calculated into variables
+					//Writing values вЂ‹вЂ‹to be calculated into variables
 					int value1 = stoi(m[first][count_first - 2]);
 					int value2 = stoi(m[second][count_second - 2]);
 
@@ -221,7 +219,7 @@ private:
 					int count_second = second_digitChar - '0';
 					second.pop_back();
 
-					//Writing values ??to be calculated into variables
+					//Writing values вЂ‹вЂ‹to be calculated into variables
 					int value1 = stoi(m[first][count_first - 2]);
 					int value2 = stoi(m[second][count_second - 2]);
 
@@ -232,55 +230,55 @@ private:
 					//Writing new data to a cell
 					m[item.first][count_vector] = to_string(result);
 				}
-				break; //Чтобы не итерироваться по всей ячейке
+				break; //Р§С‚РѕР±С‹ РЅРµ РёС‚РµСЂРёСЂРѕРІР°С‚СЊСЃСЏ РїРѕ РІСЃРµР№ СЏС‡РµР№РєРµ
 			}
 			count_vector++;
 		}
 	}
-	//Подсчёт деления
+	//РџРѕРґСЃС‡С‘С‚ РґРµР»РµРЅРёСЏ
 	void evaluate_segmentation(pair< string, vector<string >> item)
 	{
-		//Счётчик для обозначения ячейки в которой формула
+		//РЎС‡С‘С‚С‡РёРє РґР»СЏ РѕР±РѕР·РЅР°С‡РµРЅРёСЏ СЏС‡РµР№РєРё РІ РєРѕС‚РѕСЂРѕР№ С„РѕСЂРјСѓР»Р°
 		int count_vector = 0;
 
-		for (auto cell : item.second) //Извлечь ячейку из vector
+		for (auto cell : item.second) //РР·РІР»РµС‡СЊ СЏС‡РµР№РєСѓ РёР· vector
 		{
-			for (char symbol : cell) //Поиск формулы
+			for (char symbol : cell) //РџРѕРёСЃРє С„РѕСЂРјСѓР»С‹
 			{
 				if (symbol == '=')
 				{
-					// Находим позицию символа "/"
+					// РќР°С…РѕРґРёРј РїРѕР·РёС†РёСЋ СЃРёРјРІРѕР»Р° "/"
 					size_t multiplication_pos = cell.find('/');
 
-					// Извлекаем первую часть строки (после "=" и до "/")
+					// РР·РІР»РµРєР°РµРј РїРµСЂРІСѓСЋ С‡Р°СЃС‚СЊ СЃС‚СЂРѕРєРё (РїРѕСЃР»Рµ "=" Рё РґРѕ "/")
 					string first = cell.substr(1, multiplication_pos - 1);
 
-					// Извлекаем вторую часть строки (после "/")
+					// РР·РІР»РµРєР°РµРј РІС‚РѕСЂСѓСЋ С‡Р°СЃС‚СЊ СЃС‚СЂРѕРєРё (РїРѕСЃР»Рµ "/")
 					string second = cell.substr(multiplication_pos + 1);
 
-					// Извлекаем последний символ (цифру)
+					// РР·РІР»РµРєР°РµРј РїРѕСЃР»РµРґРЅРёР№ СЃРёРјРІРѕР» (С†РёС„СЂСѓ)
 					char first_digitChar = first.back();
-					// Преобразуем символ цифры в число (int)
+					// РџСЂРµРѕР±СЂР°Р·СѓРµРј СЃРёРјРІРѕР» С†РёС„СЂС‹ РІ С‡РёСЃР»Рѕ (int)
 					int count_first = first_digitChar - '0';
-					// Удаляем последний символ из строки
+					// РЈРґР°Р»СЏРµРј РїРѕСЃР»РµРґРЅРёР№ СЃРёРјРІРѕР» РёР· СЃС‚СЂРѕРєРё
 					first.pop_back();
 
 					char second_digitChar = second.back();
 					int count_second = second_digitChar - '0';
 					second.pop_back();
 
-					//Запись в переменные значений которые нужно посчитать
+					//Р—Р°РїРёСЃСЊ РІ РїРµСЂРµРјРµРЅРЅС‹Рµ Р·РЅР°С‡РµРЅРёР№ РєРѕС‚РѕСЂС‹Рµ РЅСѓР¶РЅРѕ РїРѕСЃС‡РёС‚Р°С‚СЊ
 					int value1 = stoi(m[first][count_first - 2]);
 					int value2 = stoi(m[second][count_second - 2]);
 
 					int result = value1 / value2;
 
-					//Очистка формулы в ячейке
+					//РћС‡РёСЃС‚РєР° С„РѕСЂРјСѓР»С‹ РІ СЏС‡РµР№РєРµ
 					m[item.first][count_vector] = "";
-					//Запись новых данных в ячейку
+					//Р—Р°РїРёСЃСЊ РЅРѕРІС‹С… РґР°РЅРЅС‹С… РІ СЏС‡РµР№РєСѓ
 					m[item.first][count_vector] = to_string(result);
 				}
-				break; //Чтобы не итерироваться по всей ячейке
+				break; //Р§С‚РѕР±С‹ РЅРµ РёС‚РµСЂРёСЂРѕРІР°С‚СЊСЃСЏ РїРѕ РІСЃРµР№ СЏС‡РµР№РєРµ
 			}
 			count_vector++;
 		}
@@ -311,7 +309,7 @@ Table file_to_strings(const string& path)
 	
 	if (!fs.is_open()) //Opening check
 	{
-		cout << "Ошибка открытия ффайла!" << endl;
+		cout << "РћС€РёР±РєР° РѕС‚РєСЂС‹С‚РёСЏ С„С„Р°Р№Р»Р°!" << endl;
 	}
 	else //If the file is open
 	{
@@ -380,13 +378,13 @@ int main()
 	//Creating a table and loading data from a file into it
 	Table table = file_to_strings(path);
 
-	cout << "\tИзначальная таблица:\n\n";
+	cout << "\tРР·РЅР°С‡Р°Р»СЊРЅР°СЏ С‚Р°Р±Р»РёС†Р°:\n\n";
 	//Table output
 	table.display(); 
 	//Processing all formulas
 	table.search_formul(); 
 	
-	cout << "\n\tПосчитанная таблица:\n\n";
+	cout << "\n\tРџРѕСЃС‡РёС‚Р°РЅРЅР°СЏ С‚Р°Р±Р»РёС†Р°:\n\n";
 	//Table output again
 	table.display();
 	
