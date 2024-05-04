@@ -105,32 +105,9 @@ private:
 			{
 				if (symbol == '=')
 				{
-					// Finding the position of the "+" symbol
-					size_t plus_pos = cell.find('+');
-
-					// Extract the first part of the string (after the "=" and before the "+")
-					string first = cell.substr(1, plus_pos - 1);
-
-					// Extract the second part of the string (after the "+")
-					string second = cell.substr(plus_pos + 1);
-
-					// Extracting the last character (digit)
-					char first_digitChar = first.back();
-					// Convert a digit character to a number (int)
-					int count_first = first_digitChar - '0';
-					// Remove the last character from a string
-					first.pop_back();
+					//Calling a function to search for variables and calculate the result
+					int result = writing_variables('+', cell).first+ writing_variables('+', cell).second;
 					
-					char second_digitChar = second.back();
-					int count_second = second_digitChar - '0';
-					second.pop_back();
-
-					//Writing values ​​to variables that need to be read
-					int value1 = stoi(m[first][count_first - 2]);
-					int value2 = stoi(m[second][count_second - 2]);
-
-					int result = value1 + value2;
-
 					//Writing new data to a cell
 					m[item.first][count_vector] = to_string(result);
 				}
@@ -151,34 +128,9 @@ private:
 			{
 				if (symbol == '=')
 				{
-					// Finding the position of the symbol "-"
-					size_t minus_pos = cell.find('-');
+					//Calling a function to search for variables and calculate the result
+					int result = writing_variables('-', cell).first - writing_variables('-', cell).second;
 
-					// Extract the first part of the string (after the "=" and before the "-")
-					string first = cell.substr(1, minus_pos - 1);
-
-					// Extract the second part of the string (after "-")
-					string second = cell.substr(minus_pos + 1);
-
-					// Extracting the last character (digit)
-					char first_digitChar = first.back();
-					// Convert a digit character to a number (int)
-					int count_first = first_digitChar - '0';
-					// Remove the last character from a string
-					first.pop_back();
-
-					char second_digitChar = second.back();
-					int count_second = second_digitChar - '0';
-					second.pop_back();
-
-					//Writing values ​​to be calculated into variables
-					int value1 = stoi(m[first][count_first - 2]);
-					int value2 = stoi(m[second][count_second - 2]);
-
-					int result = value1 - value2;
-
-					//Clear a formula in a cell
-					m[item.first][count_vector] = "";
 					//Writing new data to a cell
 					m[item.first][count_vector] = to_string(result);
 				}
@@ -199,90 +151,75 @@ private:
 			{
 				if (symbol == '=')
 				{
-					// Finding the position of the symbol "*"
-					size_t multiplication_pos = cell.find('*');
+					//Calling a function to search for variables and calculate the result
+					int result = writing_variables('*', cell).first * writing_variables('*', cell).second;
 
-					// Extract the first part of the string (after "=" and before "*")
-					string first = cell.substr(1, multiplication_pos - 1);
-
-					// Extract the second part of the string (after "*")
-					string second = cell.substr(multiplication_pos + 1);
-
-					// Extracting the last character (digit)
-					char first_digitChar = first.back();
-					// Convert a digit character to a number (int)
-					int count_first = first_digitChar - '0';
-					// Remove the last character from a string
-					first.pop_back();
-
-					char second_digitChar = second.back();
-					int count_second = second_digitChar - '0';
-					second.pop_back();
-
-					//Writing values ​​to be calculated into variables
-					int value1 = stoi(m[first][count_first - 2]);
-					int value2 = stoi(m[second][count_second - 2]);
-
-					int result = value1 * value2;
-
-					//Clear a formula in a cell
-					m[item.first][count_vector] = "";
 					//Writing new data to a cell
 					m[item.first][count_vector] = to_string(result);
 				}
-				break; //Чтобы не итерироваться по всей ячейке
+				break; //To avoid iterating over the entire cell
 			}
 			count_vector++;
 		}
 	}
-	//Подсчёт деления
+	//Counting divisions
 	void evaluate_segmentation(pair< string, vector<string >> item)
 	{
-		//Счётчик для обозначения ячейки в которой формула
+		//Counter to indicate the cell in which the formula
 		int count_vector = 0;
 
-		for (auto cell : item.second) //Извлечь ячейку из vector
+		for (auto cell : item.second) //Extract cell from vector
 		{
-			for (char symbol : cell) //Поиск формулы
+			for (char symbol : cell) //Search for formula
 			{
 				if (symbol == '=')
 				{
-					// Находим позицию символа "/"
-					size_t multiplication_pos = cell.find('/');
+					//Calling a function to search for variables and calculate the result
+					int result = writing_variables('/', cell).first / writing_variables('/', cell).second;
 
-					// Извлекаем первую часть строки (после "=" и до "/")
-					string first = cell.substr(1, multiplication_pos - 1);
-
-					// Извлекаем вторую часть строки (после "/")
-					string second = cell.substr(multiplication_pos + 1);
-
-					// Извлекаем последний символ (цифру)
-					char first_digitChar = first.back();
-					// Преобразуем символ цифры в число (int)
-					int count_first = first_digitChar - '0';
-					// Удаляем последний символ из строки
-					first.pop_back();
-
-					char second_digitChar = second.back();
-					int count_second = second_digitChar - '0';
-					second.pop_back();
-
-					//Запись в переменные значений которые нужно посчитать
-					int value1 = stoi(m[first][count_first - 2]);
-					int value2 = stoi(m[second][count_second - 2]);
-
-					int result = value1 / value2;
-
-					//Очистка формулы в ячейке
-					m[item.first][count_vector] = "";
-					//Запись новых данных в ячейку
+					//Writing new data to a cell
 					m[item.first][count_vector] = to_string(result);
 				}
-				break; //Чтобы не итерироваться по всей ячейке
+				break; //To avoid iterating over the entire cell
 			}
 			count_vector++;
 		}
 	}
+
+	pair<int, int> writing_variables(const char& symbol_operation,const string& expression)
+	{
+		// Finding the position of symbol
+		size_t operation_pos = expression.find(symbol_operation);
+		
+		// Extract the first part of the string (after the "=" and before the symbol operation)
+		string first = expression.substr(1, operation_pos - 1);
+
+		// Extract the second part of the string (after the symbol operation)
+		string second = expression.substr(operation_pos + 1);
+
+		// Extracting the last character (digit)
+		char first_digitChar = first.back();
+		// Convert a digit character to a number (int)
+		int count_first = first_digitChar - '0';
+		// Remove the last character from a string
+		first.pop_back();
+
+		char second_digitChar = second.back();
+		int count_second = second_digitChar - '0';
+		second.pop_back();
+
+		//Writing values ​​to variables that need to be read
+		int value1 = stoi(m[first][count_first - 2]);
+		int value2 = stoi(m[second][count_second - 2]);
+
+
+		pair<int, int> variables;
+		variables.first = value1;
+		variables.second = value2;
+		
+		return variables;
+	}
+
 
 	private:
 	map<string, vector<string>> m;
@@ -290,7 +227,7 @@ private:
 };
 
 
-Table file_to_strings(const string& path)
+Table file_to_table(const string& path)
 {
 	//Column names
 	vector<string> column_names; 
@@ -376,7 +313,7 @@ int main()
 	string path = "myfile1.csv"; 
 
 	//Creating a table and loading data from a file into it
-	Table table = file_to_strings(path);
+	Table table = file_to_table(path);
 
 	cout << "\tИзначальная таблица:\n\n";
 	//Table output
