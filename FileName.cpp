@@ -185,7 +185,7 @@ private:
 			count_vector++;
 		}
 	}
-
+	
 	pair<int, int> writing_variables(const char& symbol_operation,const string& expression)
 	{
 		// Finding the position of symbol
