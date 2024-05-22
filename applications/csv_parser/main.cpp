@@ -5,6 +5,7 @@
 #include <vector>
 #include <sstream>
 #include "Table.h"
+#include <cstdlib>
 
 using namespace std;
 
@@ -84,14 +85,21 @@ Table file_to_table(const string& path)
 
 }
 
-
-
-int main()
+int main(int argc,char* argv[])
 {
-	setlocale(LC_ALL, "ru");
-
 	//Variable to store the path to the file
-	string path = "myfile1.csv"; 
+	string path;
+
+	if (argc == 2) //User-supplied filename
+	{
+		 path = argv[2];
+	}
+	else //If the file name was not sent
+	{
+		 path = "myfile1.csv";
+	}
+
+	setlocale(LC_ALL, "ru");
 
 	//Creating a table and loading data from a file into it
 	Table table = file_to_table(path);
@@ -100,11 +108,13 @@ int main()
 	//Table output
 	table.display(); 
 	//Processing all formulas
-	table.search_formul(); 
+	table.evaluate_formulas();
 	
 	cout << "\n\tПосчитанная таблица:\n\n";
 	//Table output again
 	table.display();
 	
+	system("pause");
+
 	return 0;
 }

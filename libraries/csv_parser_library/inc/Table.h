@@ -12,13 +12,13 @@ class Table
 public:
 	Table(const vector<string>& keys, const  vector<vector<string>>& data);//We accept keys - column names and data
 	
-	void search_formul();//Finding a formula in a cell 
+	void evaluate_formulas();//Finding a formula in a cell 
 
 	void display() const;
 
 
 private:
-	void search_mat_symbol(pair< string, vector<string >> item);
+	void evaluate_formula(pair< string, vector<string >> item);
 
 	void evaluate_plus(pair< string, vector<string >> item);
 

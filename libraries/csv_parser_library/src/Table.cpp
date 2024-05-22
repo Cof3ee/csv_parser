@@ -12,7 +12,7 @@ Table::Table(const vector<string>& keys, const  vector<vector<string>>& data) //
 }
 
 //Finding a formula in a cell 
-void Table:: search_formul()
+void Table::evaluate_formulas()
 {
 	for (const auto& column : m) //Pull a pair from the map
 	{
@@ -22,7 +22,14 @@ void Table:: search_formul()
 			{
 				if (symbol == '=')
 				{
-					search_mat_symbol(column); //If the formula is found, then the function is called to search for the operation symbol
+					try
+					{
+						evaluate_formula(column); //If the formula is found, then the function is called to search for the operation symbol
+				    }
+					catch (exception& ex)
+					{
+						cout << ex.what() << endl;
+					}
 				}
 				break;
 			}
@@ -54,29 +61,39 @@ void Table:: display() const
 }
 
 //Search for the symbol of the mate operation
-void Table::search_mat_symbol(pair< string, vector<string >> item)
+void Table::evaluate_formula(pair< string, vector<string >> item)
 {
+	int a=0;
 	for (auto cell : item.second) //Extract cell from vector
 	{
 		for (char symbol : cell) //Search for mat symbol. operations
-		{
-			if (symbol == '+')
-			{
-				evaluate_plus(item);
-			}
-			if (symbol == '-')
-			{
-				evaluate_minus(item);
-			}
-			if (symbol == '*')
-			{
-				evaluate_multiplication(item);
-			}
-			if (symbol == '/')
-			{
-				evaluate_segmentation(item);
-			}
+		{ 
+			    if (symbol == '+')
+			    {
+				  evaluate_plus(item);
+				  a++;
+			    }
+			   if (symbol == '-')
+			   {
+				  evaluate_minus(item);
+				  a++;
+			   }
+			   if (symbol == '*')
+			   {
+				  evaluate_multiplication(item);
+				  a++;
+			   }
+			   if (symbol == '/')
+			   {
+				  evaluate_segmentation(item);
+				  a++;
+			   }
+		    
 		}
+	}
+	if (a < 1)
+	{
+		throw exception("The operation symbol was entered incorrectly!");
 	}
 }
 
