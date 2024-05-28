@@ -4,6 +4,7 @@
 #include<map>
 #include<vector>
 #include<string>
+#include <cstdlib>
 
 using namespace std;
 
@@ -16,20 +17,40 @@ public:
 
 	void display() const;
 
-
 private:
 	void evaluate_formula(pair< string, vector<string >> item);
 
-	void evaluate_plus(pair< string, vector<string >> item);
+	void evaluate_addition(pair< string, vector<string >> item);
 
-	void evaluate_minus(pair< string, vector<string >> item);
+	void evaluate_subtraction(pair< string, vector<string >> item);
 
 	void evaluate_multiplication(pair< string, vector<string >> item);
 
-	void evaluate_segmentation(pair< string, vector<string >> item);
+	void evaluate_division(pair< string, vector<string >> item);
 
-	pair<int, int> writing_variables(const char& symbol_operation, const string& expression);
+	pair<int, int> writing_variables( char symbol_operation, const string& expression);
 
 	map<string, vector<string>> m;
+};
+
+class MyExceptioin : public exception
+{
+public:
+	MyExceptioin(char symbol,string cell)
+	{
+		symbol_ = symbol;
+		cell_=cell;
+	}
+	char GetSymbol()
+	{
+		return symbol_;
+	}
+	string GetCell()
+	{
+		return cell_;
+	}
+private:
+	char symbol_;
+	string cell_;
 };
 

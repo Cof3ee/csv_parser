@@ -6,12 +6,12 @@
 #include <sstream>
 #include "Table.h"
 #include <cstdlib>
+#include "MyException.h"
 
 using namespace std;
 
-Table file_to_table(const string& path)
+static Table file_to_table(const string& path)
 {
-	//Column names
 	vector<string> column_names; 
 	//Column data
 	vector<string> table_data;
@@ -25,10 +25,9 @@ Table file_to_table(const string& path)
 
 	fs.open(path); //Opening a file
 
-	
 	if (!fs.is_open()) //Opening check
 	{
-		cout << "Ошибка открытия ффайла!" << endl;
+		cout << "Ошибка открытия файла!" << endl;
 	}
 	else //If the file is open
 	{
@@ -81,8 +80,6 @@ Table file_to_table(const string& path)
 		Table t(column_names, lines_token); 
 		return t; //Returning column names and their data
 	}
-
-
 }
 
 int main(int argc,char* argv[])
@@ -92,7 +89,7 @@ int main(int argc,char* argv[])
 
 	if (argc == 2) //User-supplied filename
 	{
-		 path = argv[2];
+		 path = argv[1];
 	}
 	else //If the file name was not sent
 	{

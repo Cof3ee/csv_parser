@@ -1,4 +1,5 @@
 #include "Table.h"
+#include "MyException.h"
 
 Table::Table(const vector<string>& keys, const  vector<vector<string>>& data) //We accept keys - column names and data
 {
@@ -26,9 +27,10 @@ void Table::evaluate_formulas()
 					{
 						evaluate_formula(column); //If the formula is found, then the function is called to search for the operation symbol
 				    }
-					catch (exception& ex)
+					catch (MyExceptioin& ex)
 					{
-						cout << ex.what() << endl;
+						cout << "Incorrectly entered operation operator: " ;
+						cout << ex.GetSymbol() << " in cell: " << ex.GetCell() << endl;
 					}
 				}
 				break;
@@ -63,42 +65,40 @@ void Table:: display() const
 //Search for the symbol of the mate operation
 void Table::evaluate_formula(pair< string, vector<string >> item)
 {
-	int a=0;
+	
 	for (auto cell : item.second) //Extract cell from vector
 	{
 		for (char symbol : cell) //Search for mat symbol. operations
 		{ 
-			    if (symbol == '+')
-			    {
-				  evaluate_plus(item);
-				  a++;
-			    }
-			   if (symbol == '-')
+			if (!isdigit(symbol)&&!isalpha(symbol)&&symbol!='=')
+			{
+			   if (symbol == '+')
 			   {
-				  evaluate_minus(item);
-				  a++;
+					evaluate_addition(item);
 			   }
-			   if (symbol == '*')
+			   else if (symbol == '-')
+			   {
+				   evaluate_subtraction(item);
+			   }
+			   else if (symbol == '*')
 			   {
 				  evaluate_multiplication(item);
-				  a++;
 			   }
-			   if (symbol == '/')
+			   else if (symbol == '/')
 			   {
-				  evaluate_segmentation(item);
-				  a++;
+				   evaluate_division(item);
 			   }
-		    
+			   else  
+			   {
+				   throw MyExceptioin(symbol,cell);
+			   }
+			}
 		}
-	}
-	if (a < 1)
-	{
-		throw exception("The operation symbol was entered incorrectly!");
 	}
 }
 
 //Calculating the amount
-void Table::evaluate_plus(pair< string, vector<string >> item)
+void Table::evaluate_addition(pair< string, vector<string >> item)
 {
 	//Counter to indicate the cell in which the formula
 	int count_vector = 0;
@@ -122,7 +122,7 @@ void Table::evaluate_plus(pair< string, vector<string >> item)
 }
 
 //Calculating the difference
-void Table:: evaluate_minus(pair< string, vector<string >> item)
+void Table::evaluate_subtraction(pair< string, vector<string >> item)
 {
 	//Counter to indicate the cell in which the formula
 	int count_vector = 0;
@@ -170,7 +170,7 @@ void Table:: evaluate_multiplication(pair< string, vector<string >> item)
 }
 
 //Counting divisions
-void Table:: evaluate_segmentation(pair< string, vector<string >> item)
+void Table::evaluate_division(pair< string, vector<string >> item)
 {
 	//Counter to indicate the cell in which the formula
 	int count_vector = 0;
@@ -192,8 +192,8 @@ void Table:: evaluate_segmentation(pair< string, vector<string >> item)
 		count_vector++;
 	}
 }
-//Finding and returning variables
-pair<int, int> Table:: writing_variables(const char& symbol_operation, const string& expression)
+
+pair<int, int> Table:: writing_variables(char symbol_operation, const string& expression)
 {
 	// Finding the position of symbol
 	size_t operation_pos = expression.find(symbol_operation);
@@ -218,7 +218,6 @@ pair<int, int> Table:: writing_variables(const char& symbol_operation, const str
 	//Writing values ??to variables that need to be read
 	int value1 = stoi(m[first][count_first - 2]);
 	int value2 = stoi(m[second][count_second - 2]);
-
 
 	pair<int, int> variables;
 	variables.first = value1;
