@@ -84,6 +84,9 @@ static Table file_to_table(const string& path)
 
 int main(int argc,char* argv[])
 {
+	try
+	{ 
+
 	//Variable to store the path to the file
 	string path;
 
@@ -112,6 +115,17 @@ int main(int argc,char* argv[])
 	table.display();
 	
 	system("pause");
-
+	}
+	
+	catch (exception& ex)
+	{
+		cout << ex.what() << endl;
+		return EXIT_FAILURE;
+	}
+	catch (...)
+	{
+		cout << "\nUnknown Eror in main" << endl;
+		return EXIT_FAILURE;
+	}
 	return 0;
 }

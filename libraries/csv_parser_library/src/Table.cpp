@@ -27,7 +27,7 @@ void Table::evaluate_formulas()
 					{
 						evaluate_formula(column); //If the formula is found, then the function is called to search for the operation symbol
 				    }
-					catch (MyExceptioin& ex)
+					catch (CsvParserException& ex)
 					{
 						cout << "Incorrectly entered operation operator: " ;
 						cout << ex.GetSymbol() << " in cell: " << ex.GetCell() << endl;
@@ -90,7 +90,7 @@ void Table::evaluate_formula(pair< string, vector<string >> item)
 			   }
 			   else  
 			   {
-				   throw MyExceptioin(symbol,cell);
+				   throw CsvParserException(symbol,cell);
 			   }
 			}
 		}

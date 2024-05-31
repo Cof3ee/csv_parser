@@ -6,7 +6,7 @@
 #include<string>
 #include <cstdlib>
 
-using namespace std;
+using namespace std; //переписать на std
 
 class Table
 {
@@ -33,24 +33,4 @@ private:
 	map<string, vector<string>> m;
 };
 
-class MyExceptioin : public exception
-{
-public:
-	MyExceptioin(char symbol,string cell)
-	{
-		symbol_ = symbol;
-		cell_=cell;
-	}
-	char GetSymbol()
-	{
-		return symbol_;
-	}
-	string GetCell()
-	{
-		return cell_;
-	}
-private:
-	char symbol_;
-	string cell_;
-};
 

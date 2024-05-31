@@ -1,17 +1,17 @@
 #include "MyException.h"
 
-MyException:: MyException(char symbol, string cell)
+CsvParserException:: CsvParserException(char symbol, string cell)
 {
 	symbol_ = symbol;
 	cell_ = cell;
 }
 
-char MyException::GetSymbol()
+char CsvParserException::GetSymbol()
 {
 	return symbol_;
 }
 
-string MyException::GetCell()
+string CsvParserException::GetCell()
 {
 	return cell_;
 }
