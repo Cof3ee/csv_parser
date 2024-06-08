@@ -6,7 +6,7 @@
 #include <sstream>
 #include "Table.h"
 #include <cstdlib>
-#include "MyException.h"
+#include "CsvParserException.h"
 
 using namespace std;
 
@@ -86,7 +86,6 @@ int main(int argc,char* argv[])
 {
 	try
 	{ 
-
 	//Variable to store the path to the file
 	string path;
 

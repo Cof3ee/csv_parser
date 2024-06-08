@@ -1,5 +1,5 @@
 #include "Table.h"
-#include "MyException.h"
+#include "CsvParserException.h"
 
 Table::Table(const vector<string>& keys, const  vector<vector<string>>& data) //We accept keys - column names and data
 {

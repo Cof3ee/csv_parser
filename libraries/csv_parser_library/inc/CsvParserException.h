@@ -3,18 +3,16 @@
 #include<iostream>
 #include<string>
 
-using namespace std; //переписать на std
-
-class CsvParserException : public exception //сменить название на csv_parser_exception
+class CsvParserException : public std::exception 
 {
 public:
-	CsvParserException(char symbol, string cell);
+	CsvParserException(char symbol, std::string cell);
 	
 	char GetSymbol();
 
-	string GetCell();
+	std::string GetCell();
 
 private:
 	char symbol_;
-	string cell_;
+	std::string cell_;
 };

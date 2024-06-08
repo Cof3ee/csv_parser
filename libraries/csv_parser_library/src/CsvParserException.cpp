@@ -1,4 +1,6 @@
-#include "MyException.h"
+#include "CsvParserException.h"
+
+using namespace std;
 
 CsvParserException:: CsvParserException(char symbol, string cell)
 {
