@@ -5,6 +5,7 @@
 #include<vector>
 #include<string>
 #include <cstdlib>
+#include <iomanip>
 
 using namespace std; //переписать на std
 
@@ -20,13 +21,19 @@ public:
 private:
 	void evaluate_formula(pair< string, vector<string >> item);
 
-	void evaluate_addition(pair< string, vector<string >> item);
+	void evaluate_addition(string& cell, int& count_vector, pair< string, vector<string >>& item);
 
-	void evaluate_subtraction(pair< string, vector<string >> item);
+	void evaluate_subtraction(string& cell, int& count_vector, pair< string, vector<string >>& item);
 
-	void evaluate_multiplication(pair< string, vector<string >> item);
+	void evaluate_multiplication(string& cell, int& count_vector, pair< string, vector<string >>& item);
 
-	void evaluate_division(pair< string, vector<string >> item);
+	void evaluate_division(string& cell, int& count_vector, pair< string, vector<string >>& item);
+
+	void evaluate_sin(string& cell, int& count_vector, pair< string, vector<string >>& item);
+
+	void evaluate_cos(string& cell, int& count_vector, pair< string, vector<string >>& item);
+
+	int writing_variable(const string& expression);
 
 	pair<int, int> writing_variables( char symbol_operation, const string& expression);
 
