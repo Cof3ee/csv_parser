@@ -1,6 +1,8 @@
 #include "Table.h"
 #include "CsvParserException.h"
 
+using namespace std;
+
 Table::Table(const vector<string>& keys, const  vector<vector<string>>& data) //We accept keys - column names and data
 {
 	//Variable for iteration over keys
@@ -72,9 +74,6 @@ void Table::evaluate_formula(pair< string, vector<string >> item)
 	
 	for (auto cell : item.second) //Extract cell from vector
 	{
-		char arrFunction[3]; //массив для проверки является ли слово "sin"/cos
-		int counterFuncttion=0; //счётчик для функция cos/sin
-		
 		for (char symbol : cell) //Search for mat symbol. operations
 		{
 			if (!isdigit(symbol) && symbol!='(' && symbol!=')') //проблема здесь в том, что если в операцию неверно введена скобка, то это неверно обрабатывается
@@ -104,24 +103,25 @@ void Table::evaluate_formula(pair< string, vector<string >> item)
 				}
 				else if (symbol == '=')
 				{
-					size_t foundCos = cell.find(searhCOS); //ищем слово cos
+					//Looking for the name of the operation
+					size_t foundCos = cell.find(searhCOS); 
 					size_t foundSin = cell.find(searhSIN);
 
-					if (foundCos != string::npos) //проверяем нашли ли
+					if (foundCos != string::npos) //Examination for "COS"
 					{
 						size_t start = foundCos + searhCOS.size();
 						size_t end = cell.find(")", start);
 
-						if (end != string::npos) //проверяем есть ли закрывающая скобка 
+						if (end != string::npos) //Check if there is a closing parenthesis
 						{
-							evaluate_cos(cell, count_vector, item); //если нашли и всё хорошо, то вызываем функцию
+							evaluate_cos(cell, count_vector, item); 
 						}
 						else
 						{
-							cout << "Eror, not found: ')' !!!"; //переписать на exception
+							throw CsvParserException(symbol, cell);
 						}
-						}
-					else if (foundSin != string::npos)
+					}
+					else if (foundSin != string::npos) //Examination for "SIN"
 					{
 						size_t start = foundSin + searhSIN.size();
 						size_t end = cell.find(")", start);
@@ -132,39 +132,16 @@ void Table::evaluate_formula(pair< string, vector<string >> item)
 						}
 						else
 						{
-							cout << "Eror, not found: ')' !!!"; //переписать на exception
+							throw CsvParserException(symbol, cell);
 						}
 					}
 				}
-					//else if (symbol == 'S' || symbol == 'I' || symbol == 'N')
-					//{
-					// arrFunction[counterFuncttion++] = symbol; //по очереди записываем название функции
-					//	if (counterFuncttion == 3) //если 3 буквы в массиве
-					//	{
-					//		if (arrFunction[0] == 'S' && arrFunction[1] == 'I' && arrFunction[2] == 'N') //проверяем слово
-					//		{
-					//			evaluate_sin(cell, count_vector, item); //если всё норм, то считаем
-					//		}
-					//	}
-					//}
-					//else if (symbol == 'C' || symbol == 'O' || symbol == 'S')
-					//{
-					//	arrFunction[counterFuncttion++] = symbol; //по очереди записываем название функции
-					//	if (counterFuncttion == 3) //если 3 буквы в массиве
-					//	{
-					//		if (arrFunction[0] == 'C' && arrFunction[1] == 'O' && arrFunction[2] == 'S') //проверяем слово
-					//		{
-					//			evaluate_cos(cell, count_vector, item); //если всё норм, то считаем
-					//		}
-					//	}
-				    //} //как проверял сначала, но обнаружилось что и в cos и sin есть s :)
 			}
 		}
 		count_vector++;
 	}
 }
 
-//Calculating the amount
 void Table::evaluate_addition(string &cell, int &count_vector, pair< string, vector<string >>& item)
 {
 	//Calling a function to search for variables and calculate the result
@@ -174,7 +151,6 @@ void Table::evaluate_addition(string &cell, int &count_vector, pair< string, vec
 	m[item.first][count_vector] = to_string(result);
 }
 
-//Calculating the difference
 void Table::evaluate_subtraction(string& cell, int& count_vector, pair< string, vector<string >>& item)
 {
 	//Calling a function to search for variables and calculate the result
@@ -184,7 +160,6 @@ void Table::evaluate_subtraction(string& cell, int& count_vector, pair< string, 
 	m[item.first][count_vector] = to_string(result);
 }
 
-//Product calculation
 void Table:: evaluate_multiplication(string& cell, int& count_vector, pair< string, vector<string >>& item)
 {
 	//Calling a function to search for variables and calculate the result
@@ -194,7 +169,6 @@ void Table:: evaluate_multiplication(string& cell, int& count_vector, pair< stri
 	m[item.first][count_vector] = to_string(result);
 }
 
-//Counting divisions
 void Table::evaluate_division(string& cell, int& count_vector, pair< string, vector<string >>& item)
 {
 	//Calling a function to search for variables and calculate the result
@@ -222,24 +196,26 @@ void Table::evaluate_cos(string& cell, int& count_vector, pair< string, vector<s
 
 int Table::writing_variable(const string& expression)
 {
+	//Search for the end of the operation name
 	size_t expression_start_position = expression.find('(');
-
+	
+	//Setting the desired cell for the operation
 	string cell_expression = expression.substr(expression_start_position+1);
-	cell_expression.pop_back();
-
-	char digitChar = cell_expression.back();
-
-	int count = digitChar - '0';
-
+	//Removing a parenthesis
 	cell_expression.pop_back();
 	
+	// Extracting the last character (digit)
+	char digitChar = cell_expression.back();
+	// Convert a digit character to a number (int)
+	int count = digitChar - '0';
+	// Remove the last character from a string
+	cell_expression.pop_back();
+	
+	//Writing value to variables that need to be read
 	int value = stoi(m[cell_expression][count - 2]);
 
 	return value;
 }
-//****не забыть проверить на exception после финального написани
-
-
 
 pair<int, int> Table:: writing_variables(char symbol_operation, const string& expression)
 {
@@ -263,7 +239,7 @@ pair<int, int> Table:: writing_variables(char symbol_operation, const string& ex
 	int count_second = second_digitChar - '0';
 	second.pop_back();
 
-	//Writing values ??to variables that need to be read
+	//Writing values to variables that need to be read
 	int value1 = stoi(m[first][count_first - 2]);
 	int value2 = stoi(m[second][count_second - 2]);
 

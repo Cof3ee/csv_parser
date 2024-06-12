@@ -7,37 +7,36 @@
 #include <cstdlib>
 #include <iomanip>
 
-using namespace std; //переписать на std
-
 class Table
 {
 public:
-	Table(const vector<string>& keys, const  vector<vector<string>>& data);//We accept keys - column names and data
+	Table(const std::vector<std::string>& keys, const  std::vector<std::vector<std::string>>& data);//We accept keys - column names and data
 	
 	void evaluate_formulas();//Finding a formula in a cell 
 
 	void display() const;
 
 private:
-	void evaluate_formula(pair< string, vector<string >> item);
+	void evaluate_formula(std::pair<std::string, std::vector<std::string >> item);
 
-	void evaluate_addition(string& cell, int& count_vector, pair< string, vector<string >>& item);
+	void evaluate_addition(std::string& cell, int& count_vector, std::pair< std::string, std::vector<std::string >>& item);
 
-	void evaluate_subtraction(string& cell, int& count_vector, pair< string, vector<string >>& item);
+	void evaluate_subtraction(std::string& cell, int& count_vector, std::pair< std::string, std::vector<std::string >>& item);
 
-	void evaluate_multiplication(string& cell, int& count_vector, pair< string, vector<string >>& item);
+	void evaluate_multiplication(std::string& cell, int& count_vector, std::pair< std::string, std::vector<std::string >>& item);
 
-	void evaluate_division(string& cell, int& count_vector, pair< string, vector<string >>& item);
+	void evaluate_division(std::string& cell, int& count_vector, std::pair< std::string, std::vector<std::string >>& item);
 
-	void evaluate_sin(string& cell, int& count_vector, pair< string, vector<string >>& item);
+	void evaluate_sin(std::string& cell, int& count_vector, std::pair< std::string, std::vector<std::string >>& item);
 
-	void evaluate_cos(string& cell, int& count_vector, pair< string, vector<string >>& item);
+	void evaluate_cos(std::string& cell, int& count_vector, std::pair< std::string, std::vector<std::string >>& item);
 
-	int writing_variable(const string& expression);
+	int writing_variable(const std::string& expression);
 
-	pair<int, int> writing_variables( char symbol_operation, const string& expression);
+	std::pair<int, int> writing_variables( char symbol_operation, const std::string& expression);
 
-	map<string, vector<string>> m;
+private:
+	std::map<std::string, std::vector<std::string>> m;
 };
 
 
