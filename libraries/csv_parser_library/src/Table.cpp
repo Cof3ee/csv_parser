@@ -1,5 +1,4 @@
 #include "Table.h"
-#include "CsvParserException.h"
 
 using namespace std;
 
@@ -14,7 +13,7 @@ Table::Table(const vector<string>& keys, const  vector<vector<string>>& data) //
 	}
 }
 
-//Finding a formula in a cell 
+//Finding cos and sin
 void Table::evaluate_formulas()
 {
 	for (const auto& column : m) //Pull a pair from the map
@@ -25,17 +24,14 @@ void Table::evaluate_formulas()
 			{
 				if (symbol == '=')
 				{
-					try
-					{
-						evaluate_formula(column); //If the formula is found, then the function is called to search for the operation symbol
-				    }
-					catch (CsvParserException& ex)
-					{
-						cout << "Incorrectly entered operation operator: " ;
-						cout << ex.GetSymbol() << " in cell: " << ex.GetCell() << endl;
-					}
+					evaluate_formula(column);//If the formula is found, then the function is called to search for the operation symbol
+					break;
 				}
-				break;
+				else if (symbol == '+' || symbol == '-' || symbol == '*' || symbol == '/')
+				{
+					evaluate_expression(column);
+					break;
+				}
 			}
 		}
 	}
@@ -76,7 +72,7 @@ void Table::evaluate_formula(pair< string, vector<string >> item)
 	{
 		for (char symbol : cell) //Search for mat symbol. operations
 		{
-			if (!isdigit(symbol) && symbol!='(' && symbol!=')') //проблема здесь в том, что если в операцию неверно введена скобка, то это неверно обрабатывается
+			if (!isdigit(symbol) && symbol!='(' && symbol!=')'&&symbol!=',') //проблема здесь в том, что если в операцию неверно введена скобка, то это неверно обрабатывается
 			{
 				if (!isalpha(symbol) && symbol!='=')
 				{
@@ -104,7 +100,7 @@ void Table::evaluate_formula(pair< string, vector<string >> item)
 				else if (symbol == '=')
 				{
 					//Looking for the name of the operation
-					size_t foundCos = cell.find(searhCOS); 
+					size_t foundCos = cell.find(searhCOS);  //cos npos 
 					size_t foundSin = cell.find(searhSIN);
 
 					if (foundCos != string::npos) //Examination for "COS"
@@ -145,8 +141,9 @@ void Table::evaluate_formula(pair< string, vector<string >> item)
 void Table::evaluate_addition(string &cell, int &count_vector, pair< string, vector<string >>& item)
 {
 	//Calling a function to search for variables and calculate the result
-	int result = writing_variables('+', cell).first + writing_variables('+', cell).second;
-
+	pair<int, int> variables = writing_variables('+', cell);
+	int result = variables.first + variables.second;
+	
 	//Writing new data to a cell
 	m[item.first][count_vector] = to_string(result);
 }
@@ -154,16 +151,18 @@ void Table::evaluate_addition(string &cell, int &count_vector, pair< string, vec
 void Table::evaluate_subtraction(string& cell, int& count_vector, pair< string, vector<string >>& item)
 {
 	//Calling a function to search for variables and calculate the result
-	int result = writing_variables('-', cell).first - writing_variables('-', cell).second;
+	pair<int, int> variables = writing_variables('-', cell);
+	int result = variables.first - variables.second;
 
 	//Writing new data to a cell
 	m[item.first][count_vector] = to_string(result);
 }
 
-void Table:: evaluate_multiplication(string& cell, int& count_vector, pair< string, vector<string >>& item)
+void Table::evaluate_multiplication(string& cell, int& count_vector, pair< string, vector<string >>& item)
 {
 	//Calling a function to search for variables and calculate the result
-	int result = writing_variables('*', cell).first * writing_variables('*', cell).second;
+	pair<int, int> variables = writing_variables('*', cell);
+	int result = variables.first + variables.second;
 
 	//Writing new data to a cell
 	m[item.first][count_vector] = to_string(result);
@@ -172,7 +171,8 @@ void Table:: evaluate_multiplication(string& cell, int& count_vector, pair< stri
 void Table::evaluate_division(string& cell, int& count_vector, pair< string, vector<string >>& item)
 {
 	//Calling a function to search for variables and calculate the result
-	int result = writing_variables('/', cell).first / writing_variables('/', cell).second;
+	pair<int, int> variables = writing_variables('/', cell);
+	int result = variables.first + variables.second;
 
 	//Writing new data to a cell
 	m[item.first][count_vector] = to_string(result);
@@ -248,4 +248,18 @@ pair<int, int> Table:: writing_variables(char symbol_operation, const string& ex
 	variables.second = value2;
 
 	return variables;
+}
+
+void Table::evaluate_expression(pair<string, vector<string>> item)
+{
+	Expression ex;
+	
+	pair <int, double> result= ex.evaluate_expression(item);
+
+	m[item.first][result.first] = to_string(result.second);
+}
+
+bool Table::operator == (const Table& other) const
+{
+		return this->m == other.m;
 }

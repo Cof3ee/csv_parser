@@ -1,5 +1,7 @@
 #pragma once
 
+#include "CsvParserException.h"
+#include "Expression.h"
 #include<iostream>
 #include<map>
 #include<vector>
@@ -15,6 +17,8 @@ public:
 	void evaluate_formulas();//Finding a formula in a cell 
 
 	void display() const;
+
+	bool operator == (const Table& other) const;
 
 private:
 	void evaluate_formula(std::pair<std::string, std::vector<std::string >> item);
@@ -34,6 +38,8 @@ private:
 	int writing_variable(const std::string& expression);
 
 	std::pair<int, int> writing_variables( char symbol_operation, const std::string& expression);
+
+	void evaluate_expression(std::pair< std::string, std::vector<std::string >> item);
 
 private:
 	std::map<std::string, std::vector<std::string>> m;

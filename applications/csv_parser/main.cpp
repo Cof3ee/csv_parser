@@ -89,14 +89,14 @@ int main(int argc,char* argv[])
 	//Variable to store the path to the file
 	string path;
 
-	if (argc == 2) //User-supplied filename
-	{
-		 path = argv[1];
-	}
-	else //If the file name was not sent
-	{
-		 path = "myfile1.csv";
-	}
+		if (argc == 2) //User-supplied filename
+		{
+			 path = argv[1];
+		}
+		else //If the file name was not sent
+		{
+			path = "myfile1.csv";
+		}
 
 	setlocale(LC_ALL, "ru");
 
@@ -106,8 +106,18 @@ int main(int argc,char* argv[])
 	cout << "\tИзначальная таблица:\n\n";
 	//Table output
 	table.display(); 
-	//Processing all formulas
-	table.evaluate_formulas();
+
+	cout << endl;
+	
+			try
+			{	//Processing all formulas
+				table.evaluate_formulas(); //If the formula is found, then the function is called to search for the operation symbol
+			}
+			catch (CsvParserException& ex)
+			{
+				cout << "Incorrectly entered operation operator: ";
+				cout << ex.GetSymbol() << " in cell: " << ex.GetCell() << endl;
+			}
 	
 	cout << "\n\tПосчитанная таблица:\n\n";
 	//Table output again
@@ -123,7 +133,7 @@ int main(int argc,char* argv[])
 	}
 	catch (...)
 	{
-		cout << "\nUnknown Eror in main" << endl;
+		cout << "Unknown Eror in main" << endl;
 		return EXIT_FAILURE;
 	}
 	return 0;

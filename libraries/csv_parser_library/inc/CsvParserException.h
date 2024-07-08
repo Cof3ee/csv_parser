@@ -6,7 +6,9 @@
 class CsvParserException : public std::exception 
 {
 public:
-	CsvParserException(char symbol, std::string cell);
+	CsvParserException(char symbol, const std::string & cell);
+
+	/*CsvParserException(const std::string& cell);*/
 	
 	char GetSymbol();
 
