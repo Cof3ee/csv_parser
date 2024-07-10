@@ -1,9 +1,6 @@
 #include "gtest/gtest.h"
 #include "Table.h"
 #include "CsvParserException.h";
-#include <string>
-#include <map>
-#include <vector>
 
 using namespace std;
 
@@ -14,8 +11,8 @@ struct TableFixture : public testing::Test
 		vector<string> test_keys {"A", "B"};
 
 		vector<vector<string>> test_values;
-		vector<string> value1{"Test 1", "Test 2"};
-		vector<string> value2{"Test 10", "Test 20"};
+		vector<string> value1 {"Test 1", "Test 2"};
+		vector<string> value2 {"Test 10", "Test 20"};
 
 		test_values.push_back(value1);
 		test_values.push_back(value2);
@@ -25,7 +22,6 @@ struct TableFixture : public testing::Test
 		return test_table;
 	}
 };
-
 
 TEST_F(TableFixture, TableConstructorTest)
 {
@@ -106,8 +102,8 @@ TEST_F(TableFixture, evaluate_formulasTest_sin_cos)
 	vector<vector<string>> data;
 	
 	vector<string> value_1{"134", "20", "1"};
-	vector<string> value_2{"55", "10", "12"};
-	vector<string> value_3{"1", "-0.544021", "-0.839072"};
+	vector<string> value_2{"55", "196", "12"};
+	vector<string> value_3{"1", "0.939530", "0.342466"};
 
 	data.push_back(value_1);
 	data.push_back(value_2);
@@ -119,7 +115,7 @@ TEST_F(TableFixture, evaluate_formulasTest_sin_cos)
 	vector<vector<string>> test_data;
 	
 	vector<string> test_value_1{"134", "20", "1"};
-	vector<string> test_value_2{"55", "10", "12"};
+	vector<string> test_value_2{"55", "196", "12"};
 	vector<string> test_value_3{"1", "=SIN(B3)", "=COS(B3)"};
 
 	test_data.push_back(test_value_1);
@@ -138,38 +134,4 @@ TEST_F(TableFixture, evaluate_formulasTest_any_exception)
 	Table t = create_table();
 	
 	ASSERT_NO_THROW(t.evaluate_formulas());
-}
-
-TEST(CsvParserException, ConstructorTest)
-{
-	string expectedCell = "1";
-	char expectedSymbol = '2';
-
-	CsvParserException testClass(expectedSymbol, expectedCell);
-	char actualSymbol = testClass.GetSymbol();
-	string actualCell = testClass.GetCell();
-
-	ASSERT_EQ(expectedCell, actualCell);
-	ASSERT_EQ(expectedSymbol, actualSymbol);
-}
-TEST(CsvParserException, GetSymbolTest)
-{
-	char expectedSymbol = 'q';
-	string empty="";
-
-	CsvParserException test(expectedSymbol, empty);
-	char actualSymbol = test.GetSymbol();
-
-	ASSERT_EQ(expectedSymbol, actualSymbol);
-}
-
-TEST(CsvParserException, GetCellTest)
-{
-	string expectedSymbol = "q";
-	char empty=' ';
-
-	CsvParserException test (empty,expectedSymbol);
-	string actualSymbol = test.GetCell();
-
-	ASSERT_EQ(expectedSymbol, actualSymbol);
 }

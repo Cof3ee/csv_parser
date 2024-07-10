@@ -1,13 +1,12 @@
 #include "Expression.h"
+#include <sstream>	
+#include <stack>	
+#include <cctype>
 
 using namespace std;
 
 pair<int,double> Expression::evaluate_expression(const pair< string, vector<string >> & item) 
 {
-	char addition = '+';
-	char subtraction = '-';
-	char multiplication = '*';
-	char division = '/';
     int counter_vector = 0;
 
 	for (auto cell : item.second) //Extract cell from vector
@@ -18,13 +17,13 @@ pair<int,double> Expression::evaluate_expression(const pair< string, vector<stri
 			{
 				break;
 			}
-			else if (symbol == addition || symbol == subtraction || symbol == multiplication || symbol == division)
+			else if (symbol == '+' || symbol == '-' || symbol == '*' || symbol == '/')
 			{
                 double result_expression = calculate_arithmetic_expression(cell);
                 
                 pair <int, double> result;
-                result.first = counter_vector;
-                result.second = result_expression;
+                result.first = counter_vector; //Serial number of a formula in vector
+                result.second = result_expression; 
 
                 return result;
 			}
@@ -40,13 +39,13 @@ double Expression::calculate_arithmetic_expression(const string& expression)
 
     for (int i = 0; i < expression.length(); i++)
     {
-        // Пропускаем пробелы
+        // Skip spaces
         if (isspace(expression[i]))
         {
             continue;
         }
 
-        // Если символ - цифра, то добавляем ее в стек операндов
+        // If the character is a digit, then add it to the operand stack
         if (isdigit(expression[i]))
         {
             int num = 0;
@@ -56,16 +55,16 @@ double Expression::calculate_arithmetic_expression(const string& expression)
                 num = num * 10 + (expression[i] - '0');
                 i++;
             }
-            i--; // Возвращаемся на один шаг назад, чтобы не пропустить символ
+            i--; // Go back one step so as not to miss a character
             operands.push(num);
         }
 
-        // Если символ - оператор, то обрабатываем его
-        if (isOperator(expression[i]))
+        // If the symbol is an operator, then we process it
+        if (is_operator(expression[i]))
         {
-            // Если в стеке операторов уже есть оператор с более высоким приоритетом,
-            // то вычисляем предыдущее выражение
-            while (!operators.empty() && getPriority(operators.top()) >= getPriority(expression[i]))
+            // If there is already a higher priority operator in the operator stack,
+            // then we evaluate the previous expression
+            while (!operators.empty() && get_priority(operators.top()) >= get_priority(expression[i]))
             {
                 int operand2 = operands.top();
                 operands.pop();
@@ -98,7 +97,7 @@ double Expression::calculate_arithmetic_expression(const string& expression)
         }
     }
 
-    // Вычисляем оставшиеся выражения в стеке
+    // Evaluating the remaining expressions on the stack
     while (!operators.empty())
     {
         int operand2 = operands.top();
@@ -132,14 +131,14 @@ double Expression::calculate_arithmetic_expression(const string& expression)
     return operands.top();
 }
 
-// Функция для проверки, является ли символ оператором
-bool Expression::isOperator(const char& c) const
+// Function to check if a symbol is an operator
+bool Expression::is_operator(const char& c) const
 {
     return (c == '+' || c == '-' || c == '*' || c == '/');
 }
 
-// Функция для определения приоритета оператора
-int Expression::getPriority(const char& op) const
+// Function for determining operator priority
+int Expression::get_priority(const char& op) const
 {
     if (op == '*' || op == '/')
     {

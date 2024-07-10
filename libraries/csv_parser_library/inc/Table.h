@@ -2,12 +2,10 @@
 
 #include "CsvParserException.h"
 #include "Expression.h"
-#include<iostream>
-#include<map>
-#include<vector>
-#include<string>
+#include <map>
+#include <vector>
+#include <string>
 #include <cstdlib>
-#include <iomanip>
 
 class Table
 {
@@ -37,12 +35,10 @@ private:
 
 	int writing_variable(const std::string& expression);
 
-	std::pair<int, int> writing_variables( char symbol_operation, const std::string& expression);
+	std::pair<int, int> writing_variables( const char& symbol_operation, const std::string& expression);
 
 	void evaluate_expression(std::pair< std::string, std::vector<std::string >> item);
 
 private:
 	std::map<std::string, std::vector<std::string>> m;
 };
-
-

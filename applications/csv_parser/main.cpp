@@ -98,12 +98,10 @@ int main(int argc,char* argv[])
 			path = "myfile1.csv";
 		}
 
-	setlocale(LC_ALL, "ru");
-
 	//Creating a table and loading data from a file into it
 	Table table = file_to_table(path);
 
-	cout << "\tИзначальная таблица:\n\n";
+	cout << "\tInitial table:\n\n";
 	//Table output
 	table.display(); 
 
@@ -119,7 +117,7 @@ int main(int argc,char* argv[])
 				cout << ex.GetSymbol() << " in cell: " << ex.GetCell() << endl;
 			}
 	
-	cout << "\n\tПосчитанная таблица:\n\n";
+	cout << "\n\tCalculated table:\n\n";
 	//Table output again
 	table.display();
 	

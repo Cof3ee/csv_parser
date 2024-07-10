@@ -1,4 +1,4 @@
-add_executable(csv_parser_tests csv_parser_tests.cpp)
+add_executable(csv_parser_tests Table_tests.cpp Expression_tests.cpp CsvParserException_tests.cpp)
 
 target_link_libraries(csv_parser_tests PUBLIC GTest::gtest_main)
 

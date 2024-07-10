@@ -1,15 +1,12 @@
 #pragma once
 
-#include<iostream>
-#include<string>
+#include <string>
 
 class CsvParserException : public std::exception 
 {
 public:
 	CsvParserException(char symbol, const std::string & cell);
 
-	/*CsvParserException(const std::string& cell);*/
-	
 	char GetSymbol();
 
 	std::string GetCell();

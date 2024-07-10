@@ -1,11 +1,13 @@
 #include "Table.h"
+#include <iostream>
+#include <iomanip>
 
 using namespace std;
 
-Table::Table(const vector<string>& keys, const  vector<vector<string>>& data) //We accept keys - column names and data
+//We accept keys - column names and data
+Table::Table(const vector<string>& keys, const  vector<vector<string>>& data)
 {
-	//Variable for iteration over keys
-	int counter = 0;
+	int counter = 0; //Variable for iteration over keys
 
 	for (const vector<string>& values : data) //Recording your own data for columns
 	{
@@ -13,21 +15,21 @@ Table::Table(const vector<string>& keys, const  vector<vector<string>>& data) //
 	}
 }
 
-//Finding cos and sin
+//Finding formulas
 void Table::evaluate_formulas()
 {
 	for (const auto& column : m) //Pull a pair from the map
 	{
 		for (auto cell : column.second) //Extract cell from vector
 		{
-			for (char symbol : cell) //Search for a formula that starts with: "="
+			for (char symbol : cell) 
 			{
-				if (symbol == '=')
+				if (symbol == '=') //Search for a formula that starts with: "="
 				{
 					evaluate_formula(column);//If the formula is found, then the function is called to search for the operation symbol
 					break;
 				}
-				else if (symbol == '+' || symbol == '-' || symbol == '*' || symbol == '/')
+				else if (symbol == '+' || symbol == '-' || symbol == '*' || symbol == '/') //Finding a formula that does not start with equal
 				{
 					evaluate_expression(column);
 					break;
@@ -60,7 +62,7 @@ void Table:: display() const
 	}
 }
 
-//Search for the symbol of the mate operation
+//Definition of mathematical operation
 void Table::evaluate_formula(pair< string, vector<string >> item)
 {
 	string searhCOS = "COS(";
@@ -72,7 +74,7 @@ void Table::evaluate_formula(pair< string, vector<string >> item)
 	{
 		for (char symbol : cell) //Search for mat symbol. operations
 		{
-			if (!isdigit(symbol) && symbol!='(' && symbol!=')'&&symbol!=',') //проблема здесь в том, что если в операцию неверно введена скобка, то это неверно обрабатывается
+			if (!isdigit(symbol) && symbol!='(' && symbol!=')'&&symbol!='.')
 			{
 				if (!isalpha(symbol) && symbol!='=')
 				{
@@ -101,7 +103,7 @@ void Table::evaluate_formula(pair< string, vector<string >> item)
 				{
 					//Looking for the name of the operation
 					size_t foundCos = cell.find(searhCOS);  //cos npos 
-					size_t foundSin = cell.find(searhSIN);
+					size_t foundSin = cell.find(searhSIN);  //sin npos
 
 					if (foundCos != string::npos) //Examination for "COS"
 					{
@@ -217,7 +219,7 @@ int Table::writing_variable(const string& expression)
 	return value;
 }
 
-pair<int, int> Table:: writing_variables(char symbol_operation, const string& expression)
+pair<int, int> Table:: writing_variables(const char& symbol_operation, const string& expression)
 {
 	// Finding the position of symbol
 	size_t operation_pos = expression.find(symbol_operation);
@@ -250,11 +252,12 @@ pair<int, int> Table:: writing_variables(char symbol_operation, const string& ex
 	return variables;
 }
 
+//Using the Expression Class
 void Table::evaluate_expression(pair<string, vector<string>> item)
 {
 	Expression ex;
 	
-	pair <int, double> result= ex.evaluate_expression(item);
+	pair <int, double> result = ex.evaluate_expression(item);
 
 	m[item.first][result.first] = to_string(result.second);
 }
